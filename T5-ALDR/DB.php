@@ -64,7 +64,7 @@ class DB {
     
     // hacer igual que en obtener_familias
     public static function obtiene_productos ($codFam) {
-        $sql = "SELECT cod, nombre, nombre_corto, pvp, familia FROM producto WHERE familia=:familia";
+        $sql = "SELECT cod, nombre, nombre_corto, PVP, familia FROM producto WHERE familia=:familia";
         $productos = [];
         
         try {

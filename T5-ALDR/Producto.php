@@ -15,7 +15,7 @@ class Producto {
             $this->codigo = $row['cod'];
             $this->nombre = $row['nombre'];
             $this->nombre_corto = $row['nombre_corto'];
-            $this->PVP = $row['pvp'];
+            $this->PVP = $row['PVP'];
             $this->codFam = $row['familia'];
         }
         
@@ -32,7 +32,7 @@ class Producto {
         }
 
         public function getPVP() {
-            return intval($this->PVP);
+            return $this->PVP;
         }
         
         public function getCodFam() {
