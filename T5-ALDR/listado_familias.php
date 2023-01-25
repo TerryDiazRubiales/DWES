@@ -12,6 +12,7 @@ $mensaje_bderror = " ";
 comprobarSession();
 
 $cesta = CestaCompra::cargarCesta();
+$lista_prod = $cesta->getCarrito();
 
 try {
     $familias = DB::obtiene_familias();
@@ -20,6 +21,9 @@ try {
     $mensaje_bderror = '<p>Error con la base de datos: ' . $ex->getMessage() . '</p>';
 }
 
+if (isset($_POST['vaciar'])) {
+   unset($_SESSION['cesta']);
+}
 
 ?>
 
@@ -52,12 +56,12 @@ try {
                 <!-- mostrar la cesta -->
                 <table>
                     
-                    <?php foreach ($cesta as $key => $fila): ?>
+                    <?php foreach ($lista_prod as $fila): ?>
                     <tr>
-                        <td><?= $key ?></td>
                         
-                        <td><?= $fila['familia'] ?></td>
-                        <td><?= $fila['pvp'] ?></td>
+                       <td><?= $fila['producto']->getCodigo() ?></td>
+                        <td><?= $fila['producto']->getNombre_corto() ?></td>
+                        <td><?= $fila['producto']->getPVP() ?></td>
                         <td><?= $fila['unidades'] ?></td>
                     </tr>
                        
@@ -70,7 +74,7 @@ try {
                 
                 <?php endif; ?>
                 
-                <form id='vaciar' action='<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) ?>' method='post'>
+ 		<form id='vaciar' action='<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) ?>' method='post'>
 			<input type='submit' name='vaciar' value='Vaciar Cesta'
 				<?php if ($cesta_vacia) print "disabled='true'"; ?>
 			/>
@@ -80,8 +84,8 @@ try {
 			<input type='submit' name='comprar' value='Comprar'
 				<?php if ($cesta_vacia) print "disabled='true'"; ?>
 			/>
+                        
 		</form>
-
             </div>
 
 	    <!--Lista de vínculos con la forma listado_productos.php?categoria=-->

@@ -40,10 +40,10 @@ class CestaCompra {
 
     public function eliminar_Producto($codprod, $unidades) {
 
-        $carrito[$codprod]['unidades'] -= $unidades;
+        $this->carrito[$codprod]['unidades'] -= $unidades;
 
-        if ($carrito[$codprod]['unidades'] <= 0) {
-            unset($carrito[$codprod]);
+        if ($this->carrito[$codprod]['unidades'] <= 0) {
+            unset($this->carrito[$codprod]);
         }
     }
     
@@ -61,6 +61,6 @@ class CestaCompra {
         return $this->carrito;
     }
 
-
+   
    
 }

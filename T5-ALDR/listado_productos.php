@@ -45,8 +45,8 @@ if (isset($_POST['anadir'])) {
 } 
 
 if (isset($_POST['vaciar'])) {
-    $cesta = [];
-    $_SESSION['cesta'] = [];
+    unset($_SESSION['cesta']);
+   
 }
 
 ?>
@@ -62,7 +62,7 @@ if (isset($_POST['vaciar'])) {
 
     <body class="pagproductos">
         
-        <pre> <?= var_dump($cesta) ?> </pre>
+        
         
         <?= $mensaje_bderror ?>
         <!-- si se intenta acceder directamente sin cliquear en familias -->

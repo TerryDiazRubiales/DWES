@@ -1,26 +1,32 @@
 <?php
 require_once './funciones.php';
+require_once './DB.php';
 require_once './CestaCompra.php';
+require_once './Producto.php';
+
 comprobarSession();
 
 $cesta = CestaCompra::cargarCesta();
+$lista_prod = $cesta->getCarrito();
 
 $precioFinal = 0;
 
 if (isset($_POST['quitar'])) {
-    $producto = ['unidad'=>$_POST['unidad']];
+    $unidades = $_POST['unidad'];
     $codprod = $_POST['cod_prod'];
-    quitarProducto($cesta, $producto, $codprod);
-    guardarCesta($cesta);
     
-    foreach ($cesta as $key => $fila) {
-    $precioFinal += $fila['pvp']*$fila['unidades'];
+    $cesta->eliminar_Producto($codprod, $unidades);
+    
+    $cesta->guardarCesta();
+    
+    foreach ($lista_prod as $fila) {
+    $precioFinal += $fila['producto']->getPVP()*$fila['unidades'];
     }
 
     
 } else {
-    foreach ($cesta as $key => $fila) {
-    $precioFinal += $fila['pvp']*$fila['unidades'];
+    foreach ($lista_prod as $fila) {
+    $precioFinal += $fila['producto']->getPVP()*$fila['unidades'];
     }
 
 }
@@ -42,12 +48,13 @@ if (isset($_POST['quitar'])) {
   <div id="encabezado">
     <h1>Cesta de la compra</h1>
   </div>
+     
   <div id="productos">
 <?php if (isset($cesta) && $cesta->estaVacia()==false): ?>
                 <!-- mostrar la cesta -->
                 <table>
                     
-                    <?php foreach ($cesta as $fila): ?>
+                    <?php foreach ($lista_prod as $fila): ?>
                     <form id="form_seleccion" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
                     
                         <tr>
