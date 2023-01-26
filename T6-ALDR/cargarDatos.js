@@ -8,5 +8,7 @@ const boton = document.querySelector("#java");
 boton.addEventListener("click", anadirProducto);
 
 const anadirProducto = (formulario) => {
+    const http = new XMLHttpRequest();
     
+    http.open();
 }
