@@ -33,7 +33,9 @@ const cargarCesta = () => {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            // 
+            // recogemos el json_encode
+            var filas = JSON.parse(this.responseText);
+            // crea una tabla que guarda y muestre
         }
     };
     

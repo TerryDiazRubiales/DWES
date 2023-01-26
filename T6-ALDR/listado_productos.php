@@ -1,4 +1,8 @@
 <?php
+
+/* me falta la funcion crear tabla y crear fila para 
+ * que me cree una tabla con los productos de una familia indicada
+como la hecha aqui en html pero desde una funcion en cargarDatos.js */
 require_once './funciones.php';
 require_once './DB.php';
 require_once './CestaCompra.php';
