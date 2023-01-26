@@ -136,6 +136,7 @@ if (isset($_POST['vaciar'])) {
                 <!-- Aqui mandamos los datos en oculto para luego poder recogerlos en el php de editar -->
                 <input type="hidden" name="cod_prod" value="<?= $producto->getCodigo() ?>">
                 
+                <input type="submit" class="java" value="JAva">
                 </tr>
                 
                 </form>

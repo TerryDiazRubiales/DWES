@@ -3,4 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Other/javascript.js to edit this template
  */
 
+const boton = document.querySelector("#java");
 
+boton.addEventListener("click", anadirProducto);
+
+const anadirProducto = (formulario) => {
+    
+}
