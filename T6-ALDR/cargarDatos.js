@@ -7,8 +7,36 @@ const boton = document.querySelector("#java");
 
 boton.addEventListener("click", anadirProducto);
 
-const anadirProducto = (formulario) => {
-    const http = new XMLHttpRequest();
+const anadirProducto = (evento) => {
+    let codigo_producto = evento.cod.value;
+    let unidades_producto = evento.unidades.value;
     
-    http.open();
+    let parametros = "codigo = "+codigo_producto+"&unidades = "+unidades_producto;
+    
+    var xhttp = new XMLHttpRequest();
+    
+    
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            cargarCesta();
+        }
+    };
+        
+    xhttp.open("POST", "anadir_json.php", true);
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send(parametros);
+    
+    return false;
+}
+
+const cargarCesta = () => {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            // 
+        }
+    };
+    
+    xhttp.open("GET", "cesta_json.php", true);
+    xhttp.send();
 }

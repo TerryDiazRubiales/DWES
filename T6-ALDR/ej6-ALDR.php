@@ -72,7 +72,7 @@ try {
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Ejercicio 1T5: Login</title>		
+        <title>Ejercicio 1T6: Login</title>		
         <meta charset = "UTF-8">
     </head>
     <body>			

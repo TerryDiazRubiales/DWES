@@ -122,7 +122,7 @@ if (isset($_POST['vaciar'])) {
                 <!-- Se hace el bucle para mostrar la info que queremos de todos los productos que hay de esa familia  -->
                 <?php foreach ($productos as $producto): ?>
                 <!-- Se hace el form y en cada uno se ira metiendo cada dato para que en el input que creamos dentro solo recoja la info de dicho producto  -->
-                <form id="form_seleccion" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+                <form id="form_seleccion" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" onsubmit="">
                 <tr>
                     <td>
                        <input type="number" name="unidades" value="<?= $unidades = 1 ?>"/>
@@ -136,7 +136,7 @@ if (isset($_POST['vaciar'])) {
                 <!-- Aqui mandamos los datos en oculto para luego poder recogerlos en el php de editar -->
                 <input type="hidden" name="cod_prod" value="<?= $producto->getCodigo() ?>">
                 
-                <input type="submit" class="java" value="JAva">
+               
                 </tr>
                 
                 </form>
