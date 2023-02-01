@@ -54,6 +54,17 @@ if (isset($_POST['vaciar'])) {
     $cesta = CestaCompra::cargarCesta();
 }
 
+if (isset($_POST['quitarUnidades'])) {
+    $unidades = $_POST['unidades'];
+    $codprod = $_POST['cod_prod'];
+    
+    $cesta->eliminar_Producto($codprod, $unidades);
+    
+    $cesta->guardarCesta();
+    $lista_prod = $cesta->getCarrito();
+    
+}
+
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -84,7 +95,7 @@ if (isset($_POST['vaciar'])) {
                 <hr />
                 <?php if (isset($cesta) && $cesta->estaVacia()==false): ?>
                 <!-- mostrar la cesta -->
-                <table>
+                <table id="tabla_cesta">
                     
                     <?php foreach ($lista_prod as $fila): ?>
                     <tr>
@@ -126,11 +137,13 @@ if (isset($_POST['vaciar'])) {
                 <!-- Se hace el bucle para mostrar la info que queremos de todos los productos que hay de esa familia  -->
                 <?php foreach ($productos as $producto): ?>
                 <!-- Se hace el form y en cada uno se ira metiendo cada dato para que en el input que creamos dentro solo recoja la info de dicho producto  -->
-                <form id="form_seleccion" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" onsubmit="">
+                <form id="form_seleccion" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" onsubmit="anadirProducto(this); return false">
                 <tr>
                     <td>
-                       <input type="number" name="unidades" value="<?= $unidades = 1 ?>"/>
+                       <input type="number" name="unidades" placeholder="Unidades" value="<?= $unidades = 1 ?>"/>
                        <input type="submit" name="anadir" value="Añadir"/>
+                       <input type="submit" name="quitarUnidades" value="Quitar"/>
+                      
                     </td>
                     <td><?= $producto->getNombre_corto() ?>: </td>
                     <td><?= $producto->getPVP() ?> euros</td>

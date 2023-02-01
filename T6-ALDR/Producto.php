@@ -1,11 +1,20 @@
 <?php
 
-class Producto {
+class Producto implements JsonSerializable {
         protected $codigo;
         protected $nombre;
         protected $nombre_corto;
         protected $PVP;
         protected $codFam;
+        
+        public function jsonSerialize() {
+            $array_producto = ['codigo'=>$this->getCodigo(),
+                                'nombre_corto'=>$this->getNombre_corto(),
+                                'PVP'=>$this->getPVP(),
+                                'familia'=>$this->getCodFam()];
+            
+            return $array_producto;
+        }
         
         public function muestra() {
             print "<p>" . $this->codigo . "</p>";
@@ -39,10 +48,9 @@ class Producto {
             return $this->codFam;
         }
 
+    
 
-        
-        
-    }
+}
 
     
 

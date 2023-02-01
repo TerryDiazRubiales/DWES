@@ -32,13 +32,45 @@ const anadirProducto = (evento) => {
 const cargarCesta = () => {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
+        
+        let tabla = document.getElementById('tabla_cesta');
+        
         if (this.readyState == 4 && this.status == 200) {
             // recogemos el json_encode
-            var filas = JSON.parse(this.responseText);
             // crea una tabla que guarda y muestre
+            try {
+                let recogeCesta = JSON.parse(this.responseText);
+                tabla.innerHTML = "";
+                
+            } catch (e) {
+                
+            }
         }
     };
     
     xhttp.open("GET", "cesta_json.php", true);
     xhttp.send();
+}
+
+const cargarProducto = () => {
+    
+}
+
+const crearTablaProductos = (productos) => {
+    
+}
+
+const crearTablaCesta = (productos) => {
+    
+}
+
+const crear_fila = (campos, tipo) => {
+    const x = document.getElementById();
+    
+    for (var i=0; i<campos.length; i++) {
+        var celda = document.createElement (tipo);
+        celda.innerHTML = campos[i];
+        x.appendChild(celda);
+        
+    }
 }
