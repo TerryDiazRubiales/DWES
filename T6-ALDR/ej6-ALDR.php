@@ -1,4 +1,7 @@
 <?php
+require_once './DB.php';
+
+
 $mensaje = " ";
 
 if (isset($_REQUEST['redirigido'])) {
@@ -19,32 +22,20 @@ if (isset($_REQUEST['logout'])) {
 }
 
 // nos conectamos a la base de datos
-$dsn = 'mysql:dbname=dwes2;host=127.0.0.1';
-$user = 'dwes2';
-$password = 'abc123.';
-
 $mensaje_bderror = " ";
 $mensaje_loginerror = " ";
 
-try {
-
-    if (isset($_POST['enviar'])) {
+if (isset($_POST['enviar'])) {
         // recogemos usuario y contraseña
         $usuario = $_POST['usuario'];
         $passwd = $_POST['clave'];
         
-        $bd = new PDO($dsn, $user, $password);
-        
-        /* con esto comprobaremos si existe o no el usuario, 
+        try {
+             /* con esto comprobaremos si existe o no el usuario, 
          * si devuele fila "Existe", si no devuelve filas "No existe" */
-        $selectPrep = "SELECT * FROM usuarios WHERE usuario=:nombre AND password=:clave";
-        $prepare = $bd->prepare($selectPrep);
-        $parametros = [':nombre' => $usuario, ':clave' => $passwd];
-        $prepare->execute($parametros);
-        $filas = $prepare->rowCount();
-
-        // 
-        if ($filas == 0) {
+        $iniciar = DB::verificar_cliente($usuario, $passwd);
+                
+        if ($iniciar == false) {
             $mensaje_loginerror = "¡Error! Usuario inexistentes";
         } else {
             session_start();
@@ -61,12 +52,13 @@ try {
                 header("Location: listado_familias.php");
             }
             
-            
         }
+        } catch (Exception $ex) {
+
+        }
+       
     }
-} catch (Exception $ex) {
-    $mensaje_bderror = '<p>Error con la base de datos: ' . $ex->getMessage() . '</p>';
-}
+  
 ?>
 
 <!DOCTYPE html>

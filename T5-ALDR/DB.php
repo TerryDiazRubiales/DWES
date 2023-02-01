@@ -87,19 +87,33 @@ class DB {
     
     // aqui no, aqui solo devuelve truo o false dependiendo de si existe o no
     public static function verificar_cliente ($usuario, $passwd) {
-        $sql = "SELECT * FROM usuarios WHERE usuario=:nombre AND password=:clave";
+        $sql = "SELECT * FROM usuarios WHERE usuario=:nombre";
         $verificado = false;
         
         try {
-           $res = self::ejecuta_consulta_preparada($sql, [':nombre' => $usuario, ':clave' => $passwd]);
-            
+           $res = self::ejecuta_consulta_preparada($sql, [':nombre' => $usuario]);
+           
+           // comprobamos que hay resultados, depende de eso devuelve true o false
            $numFilas = $res->rowCount();
            
-           if ($numFilas==0) {
-               $verificado = false;
+           if ($numFilas>0) {
+            // aqui lo de comparar contraseñas hash y la otra para que sea correcta
+                // saco todo de la consulta de arriba y lo guardo en $user
+               $user = $res->fetch();
+                // de $user, obtengo la contraseña
+               $hash = $user['password'];
+                // las comparo
+               $login_ok = password_verify($passwd, $hash);
+              
+               if ($login_ok) {
+                   $verificado = true;
+               } else {
+                   $verificado = false;
+               }
                
            } else {
-               $verificado = true;
+              $verificado = false;
+               
            }
            
         } catch (Exception $exc) {
