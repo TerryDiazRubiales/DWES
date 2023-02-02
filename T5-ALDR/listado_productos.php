@@ -56,13 +56,16 @@ if (isset($_POST['detalle'])) {
         
         if ($cod_fam == 'TV') {
             $tv = DB::obtiene_tv($cod);
+            
             $nombre = $tv->getNombre_corto();
             $pulgadas = $tv->getPulgadas();
             $resolucion = $tv->getResolucion();
             $panel = $tv->getPanel();
             $precio = $tv->getPVP();
+            
         } elseif ($cod_fam == 'ORDENA') {
             $ordenador = DB::obtiene_sobremesa($cod);
+            
             $nombre = $ordenador->getNombre_corto();
             $marca = $ordenador->getMarca();
             $modelo = $ordenador->getModelo();
@@ -72,6 +75,7 @@ if (isset($_POST['detalle'])) {
             $extras = $ordenador->getExtras();
             $precio = $ordenador->getPVP();
         }
+        
     } catch (Exception $ex) {
         $mensaje_excepcion = $ex->getMessage();
     }

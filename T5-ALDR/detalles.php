@@ -21,6 +21,7 @@ if (isset($_POST['detalle'])) {
         
         if ($cod_familia == 'TV') {
             $tv = DB::obtiene_tv($cod);
+            
             $nombre = $tv->getNombre_corto();
             $pulgadas = $tv->getPulgadas();
             $resolucion = $tv->getResolucion();
@@ -29,6 +30,7 @@ if (isset($_POST['detalle'])) {
             
         } elseif ($cod_familia == 'ORDENA') {
             $ordenador = DB::obtiene_sobremesa($cod);
+            
             $nombre = $ordenador->getNombre_corto();
             $marca = $ordenador->getMarca();
             $modelo = $ordenador->getModelo();
