@@ -50,6 +50,33 @@ if (isset($_POST['vaciar'])) {
     $cesta = CestaCompra::cargarCesta();
 }
 
+if (isset($_POST['detalle'])) {
+    try {
+        $cod = $_POST['cod_pro'];
+        
+        if ($cod_fam == 'TV') {
+            $tv = DB::obtiene_tv($cod);
+            $nombre = $tv->mostrar_nombre();
+            $pulgadas = $tv->getPulgadas();
+            $resolucion = $tv->getResolucion();
+            $panel = $tv->getPanel();
+            $precio = $tv->getPVP();
+        } elseif ($cod_fam == 'ORDENA') {
+            $ordenador = DB::obtiene_sobremesa($cod);
+            $nombre = $ordenador->mostrar_nombre();
+            $marca = $ordenador->getMarca();
+            $modelo = $ordenador->getModelo();
+            $procesador = $ordenador->getProcesador();
+            $ram = $ordenador->getRam();
+            $rom = $ordenador->getRom();
+            $extras = $ordenador->getExtras();
+            $precio = $ordenador->getPVP();
+        }
+    } catch (Exception $ex) {
+        $mensaje_excepcion = $ex->getMessage();
+    }
+}
+
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -131,14 +158,23 @@ if (isset($_POST['vaciar'])) {
                     <td><?= $producto->getNombre_corto() ?>: </td>
                     <td><?= $producto->getPVP() ?> euros</td>
                 
-                <!-- Aqui mandamos las unidades -->
-                
                 <!-- Aqui mandamos los datos en oculto para luego poder recogerlos en el php de editar -->
                 <input type="hidden" name="cod_prod" value="<?= $producto->getCodigo() ?>">
-                
+                </form>
+                <td>
+                            <form action='<?= htmlspecialchars("./detalles.php") ?>' method='post'>
+                                <input type="hidden" name="cod_pro" value="<?= $producto->getCodigo() ?>"/>
+                                <!-- Si no es TV o ORDENA, el botón estará deshabilitado -->
+                                <input type="submit" name='detalle' value="Detalle"
+                                <?php if ($cod_fam != 'TV' && $cod_fam != 'ORDENA'): ?>
+                                           disabled='true'
+                                <?php endif; ?>/>
+                            </form>
+                 </td>
+                 
                 </tr>
                 
-                </form>
+                
                 
                 <?php endforeach; ?>
                 

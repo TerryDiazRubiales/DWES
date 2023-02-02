@@ -146,26 +146,7 @@ class DB {
         return $producto;
         
     }
-    
-     public static function obtiene_tv ($cod) {
-        $sql = "SELECT televisor.*, producto.nombre, producto.nombre_corto, producto.PVP, producto.familia FROM televisor, producto WHERE televisor.cod=:codigo AND producto.cod=televisor.cod;";
-        $tv = [];
-        
-        try {
-           $res = self::ejecuta_consulta($sql, [':codigo' => $cod]);
-           // return $res->fetchAll();
-           
-            foreach ($res as $fila) {
-               $tv[] = new Producto_Detalle ($fila);
-           }
-             
-           
-        } catch (Exception $exc) {
-           throw $exc;
-        }
-        
-     }
-     
+   
      public static function vacia ($productos) {
         
         if (count($productos) > 0) {
@@ -176,7 +157,39 @@ class DB {
         
     }
     
+     public static function obtiene_tv($cod_producto) {
+        $sql = "SELECT producto.cod, producto.nombre_corto, producto.descripcion, producto.PVP, producto.familia, televisor.pulgadas, televisor.resolucion, televisor.panel FROM televisor INNER JOIN producto WHERE producto.cod = televisor.cod AND producto.cod = :cod_producto";
+        $tv;
+        
+        try{
+            $resultado = self::ejecuta_consulta_preparada($sql, [':cod_producto' => $cod_producto]);
+          
+            if( ($resultado->rowCount()>0)){
+                $tv = new Televisor($resultado->fetch());
+            }
+            
+        } catch (Exception $ex) {
+            throw $ex;
+        }
+        return $tv;
+    }
     
+    public static function obtiene_sobremesa($cod_producto) {
+        $sql = "SELECT producto.cod, producto.nombre_corto, producto.descripcion, producto.PVP, producto.familia, sobremesa.marca, sobremesa.modelo, sobremesa.procesador, sobremesa.ram, sobremesa.rom, sobremesa.extras FROM producto INNER JOIN sobremesa WHERE producto.cod = sobremesa.cod AND producto.cod = :cod_producto";
+        $sobremesa;
+        
+        try {
+            $resultado = self::ejecuta_consulta_preparada($sql, [':cod_producto' => $cod_producto]);
+            
+            if( ($resultado->rowCount()>0)){
+                $sobremesa = new Sobremesa($resultado->fetch(PDO::FETCH_ASSOC));
+            }
+            
+        } catch (Exception $exc) {
+            throw $exc;
+        }
+        return $sobremesa;
+    }
     
 }
 
