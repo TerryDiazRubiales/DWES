@@ -1,4 +1,5 @@
 <?php
+require_once './DB.php';
 
 class CestaCompra {
     protected $carrito = [];
@@ -38,13 +39,19 @@ class CestaCompra {
         $_SESSION['cesta'] = $this;
     }
 
-    public function eliminar_Producto($codprod, $unidades) {
+    public function eliminar_Producto($codprod) {
 
-        $this->carrito[$codprod]['unidades'] -= $unidades;
-
-        if ($this->carrito[$codprod]['unidades'] <= 0) {
-            unset($this->carrito[$codprod]);
+        if (array_key_exists($codprod, $this->carrito)) {
+            $unidades =  intval($this->carrito[$codprod]['unidades']);
+            
+            if ($unidades <= 1) {
+                unset($this->carrito[$codprod]);
+            } else {
+                $this->carrito[$codprod]['unidades'] = intval($this->carrito[$codprod]['unidades']) -1;
+            }
         }
+        
+        
     }
     
     public function estaVacia () {

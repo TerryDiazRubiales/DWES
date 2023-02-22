@@ -39,31 +39,13 @@ try {
 }
 
 
-if (isset($_POST['anadir'])) {
-    $unidades = $_POST['unidades'];
-    $codProd = $_POST['cod_prod'];
-
-    $cesta->cargar_articulo($codProd, $unidades);
-    $cesta->guardarCesta();
-    $lista_prod = $cesta->getCarrito();
-    
-} 
 
 if (isset($_POST['vaciar'])) {
     unset($_SESSION['cesta']);
     $cesta = CestaCompra::cargarCesta();
 }
 
-if (isset($_POST['quitarUnidades'])) {
-    $unidades = $_POST['unidades'];
-    $codprod = $_POST['cod_prod'];
-    
-    $cesta->eliminar_Producto($codprod, $unidades);
-    
-    $cesta->guardarCesta();
-    $lista_prod = $cesta->getCarrito();
-    
-}
+
 
 ?>
 
@@ -74,12 +56,11 @@ if (isset($_POST['quitarUnidades'])) {
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
         <title>Listado de productos</title>
         <link href="tienda.css" rel="stylesheet" type="text/css">
+        
     </head>
 
     <body class="pagproductos">
-        
-        
-        
+       
         <?= $mensaje_bderror ?>
         <!-- si se intenta acceder directamente sin cliquear en familias -->
         <?= $mensaje_sinfamilia ?>
@@ -92,78 +73,12 @@ if (isset($_POST['quitarUnidades'])) {
             <!-- Dividir en varios templates -->
             <div id="cesta">      
                 <h2><img src='img/cesta.png' alt='Cesta' width='24' height='21'> Cesta</h2>
-                <hr />
-                <?php if (isset($cesta) && $cesta->estaVacia()==false): ?>
-                <!-- mostrar la cesta -->
-                <table id="tabla_cesta">
-                    
-                    <?php foreach ($lista_prod as $fila): ?>
-                    <tr>
-                        
-                       <td><?= $fila['producto']->getCodigo() ?></td>
-                        <td><?= $fila['producto']->getNombre_corto() ?></td>
-                        <td><?= $fila['producto']->getPVP() ?></td>
-                        <td><?= $fila['unidades'] ?></td>
-                    </tr>
-                       
-                    <?php endforeach; ?>
-                </table>
+                <hr/>
                
-                
-                <?php else: ?>
-                <h4>Cesta vacia</h4>
-                
-                <?php endif; ?>
-                
- 		<form id='vaciar' action='<?php echo htmlspecialchars($_SERVER["PHP_SELF"]) ?>' method='post'>
-			<input type='submit' name='vaciar' value='Vaciar Cesta'
-				<?php if ($cesta_vacia) print "disabled='true'"; ?>
-			/>
-                        <input type="hidden" name="familia" value="<?= $cod_fam ?>"/>
-		</form>
-		<form id='comprar' action='cesta.php' method='post'>
-			<input type='submit' name='comprar' value='Comprar'
-				<?php if ($cesta_vacia) print "disabled='true'"; ?>
-			/>
-                        
-		</form>
             </div>
 
             <div id="productos">
-                
-                <?php if (isset($productos) && count($productos)>0): ?>
-            <table>
-                
-                <!-- Se hace el bucle para mostrar la info que queremos de todos los productos que hay de esa familia  -->
-                <?php foreach ($productos as $producto): ?>
-                <!-- Se hace el form y en cada uno se ira metiendo cada dato para que en el input que creamos dentro solo recoja la info de dicho producto  -->
-                <form id="form_seleccion" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" onsubmit="anadirProducto(this); return false">
-                <tr>
-                    <td>
-                       <input type="number" name="unidades" placeholder="Unidades" value="<?= $unidades = 1 ?>"/>
-                       <input type="submit" name="anadir" value="Añadir"/>
-                       <input type="submit" name="quitarUnidades" value="Quitar"/>
-                      
-                    </td>
-                    <td><?= $producto->getNombre_corto() ?>: </td>
-                    <td><?= $producto->getPVP() ?> euros</td>
-                
-                <!-- Aqui mandamos las unidades -->
-                
-                <!-- Aqui mandamos los datos en oculto para luego poder recogerlos en el php de editar -->
-                <input type="hidden" name="cod_prod" value="<?= $producto->getCodigo() ?>">
-                
-               
-                </tr>
-                
-                </form>
-                
-                <?php endforeach; ?>
-                
-            </table>
-            <?php elseif (isset($productos) && DB::vacia($productos) == true): ?>
-                <h4> No hay productos de esta familia</h4>
-            <?php endif; ?>
+           
                 
             </div>
            
@@ -175,6 +90,8 @@ if (isset($_POST['quitarUnidades'])) {
 
             </div>
         </div>
+        
+        <script src="cargarDatos.js"></script>
     </body>
 </html>
 

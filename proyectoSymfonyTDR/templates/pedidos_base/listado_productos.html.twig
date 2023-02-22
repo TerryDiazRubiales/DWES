@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+
+
+{% block contenido %}
+    {% block title %}Listado productos{% endblock %}
+    
+    <table>
+                {% for producto in productos %}
+                <tr>
+                    <td>
+                       <form action="{{ path('anadir', {'producto_id': producto.getId()}) }}" method="post">
+               
+                        <input type="number" name="unidades"/>
+                        <input type="submit" name="anadir" value="Añadir"/>
+                        <input type="hidden" name="cod_prod" value="{{ producto.getId() }}">
+                       </form>
+                    </td>
+                    <td>{{ producto.getNombre() }}</td>
+                    <td>{{ producto.getPrecio() }} euros</td>
+                
+                </tr>
+                
+                
+                
+                {%  endfor %}
+                
+            </table>
+    
+    
+    
+{% endblock %}
