@@ -21,7 +21,7 @@ class AnadirController extends AbstractController
     /**
      * @Route("/anadir", name="anadir")
      */
-    public function obtenerFamilias(ManagerRegistry $doctrine): Response
+    public function anadirProducto(ManagerRegistry $doctrine): Response
     {
        
         $familias = $doctrine->getRepository(Familia::class)->findAll();
