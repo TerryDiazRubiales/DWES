@@ -74,9 +74,7 @@ const mostrarCesta = (cesta) => {
         $hr.insertAdjacentElement('afterend',$p);
         
     } else {
-        $p = d.createElement('p');
-        $p.textContent = "Cesta Llena";
-        
+                
         $div = d.createElement('div');
         $hr.insertAdjacentElement('afterend', $div);
         
@@ -106,11 +104,6 @@ const mostrarCesta = (cesta) => {
         $tdCabeceraUnidades.textContent = 'Unidades'
         $trCabecera.appendChild($tdCabeceraUnidades)
        
-        let $tdCabeceraEliminar = d.createElement('td')
-        $tdCabeceraEliminar.textContent = 'Eliminar'
-        $trCabecera.appendChild($tdCabeceraEliminar)
-        
-        
         let $tbody = d.createElement('tbody')
         $thead.insertAdjacentElement('afterend',$tbody)
         
@@ -225,7 +218,7 @@ const crearTablaProductos = (productos) => {
         $thead.appendChild($tr)
 
         let $thAdd = d.createElement('th')
-        $thAdd.textContent = 'Añadir'
+        $thAdd.textContent = ''
         $tr.insertAdjacentElement('beforeend', $thAdd)
 
         let $thCodigo = d.createElement('th')
@@ -257,7 +250,7 @@ const crearFila = (producto) => {
 
     //crear formulario en cada fila
     //crearFormulario(textoBoton, codProducto, funcion) // la funcion añadir producto
-    let codigoProducto = producto.codigo
+    let codigoProducto = producto.codigo;
     let $tdFormulario = crearFormulario('Añadir', codigoProducto);
     $fila.insertAdjacentElement('beforeend', $tdFormulario);
 
@@ -285,10 +278,10 @@ const crearFormulario = (textoBtn, codProducto) => {
     $td.appendChild($formAdd);
 
     let $input = d.createElement('input');
-    $input.setAttribute('type', 'number')
-    $input.setAttribute('name', 'unid')
-    $input.setAttribute('min', 1)
-    $input.dataset.codigo = codProducto
+    $input.setAttribute('type', 'number');
+    $input.setAttribute('name', 'unid');
+    $input.setAttribute('value', 1);
+    $input.dataset.codigo = codProducto;
     $input.id = 'unidades'
     $formAdd.appendChild($input)
 

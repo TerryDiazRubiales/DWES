@@ -9,11 +9,12 @@
                 {% for producto in productos %}
                 <tr>
                     <td>
-                       <form action="{{ path('anadir', {'producto_id': producto.getId()}) }}" method="post">
+                       <form action="{{ path('anadir', {'idProd': producto.getId()}) }}" method="POST">
                
-                        <input type="number" name="unidades"/>
+                        <input type="number" name="unidades" value="1"/>
+                        <input type="hidden" name="codProd" value="{{ producto.getCod() }}">
                         <input type="submit" name="anadir" value="Añadir"/>
-                        <input type="hidden" name="cod_prod" value="{{ producto.getId() }}">
+                        
                        </form>
                     </td>
                     <td>{{ producto.getNombre() }}</td>

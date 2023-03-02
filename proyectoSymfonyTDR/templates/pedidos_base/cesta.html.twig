@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block contenido %}
+   {% block title %}Cesta{% endblock %}
+    <table>
+           {% for producto in productos %}
+                <tr>
+                   
+                    <td>{{ producto.producto.getCod() }}</td>
+                    <td>{{ producto.producto.getNombre() }}</td>
+                    <td>{{ producto.producto.getPrecio() }} euros</td>
+                    <td>{{ producto.unidades }} unidades</td>
+                    
+                    <td>
+                        {#
+                        <form action="{{ path('eliminar', {'cod_prod': producto.producto.getCod()}) }}" method="POST">
+                            <input type="number" name="unidades" value="1"/>
+                            <input type="submit" name="eliminar" value="Eliminar"/>
+                            <input type="hidden" name="cod_prod" value="{{ producto.producto.getCod() }}">
+                        </form>
+                        #}
+                        <form action="{{ path('eliminar', {'cod_prod': producto.producto.getId()}) }}" method="POST">
+                            <input type="number" name="unidades" value="1"/>
+                            <input type="submit" name="eliminar" value="Eliminar"/>
+                            <input type="hidden" name="cod_prod" value="{{ producto.producto.getCod() }}">
+                        </form>
+                    </td
+                   
+                </tr>
+               
+            {%  endfor %}     
+                
+    </table>
+            
+            <p>Precio Total: {{ precioTotal }} euros</p>
+    
+    
+    
+{% endblock %}

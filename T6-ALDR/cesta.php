@@ -50,7 +50,7 @@ if (isset($_POST['quitar'])) {
     <h1>Cesta de la compra</h1>
   </div>
      
-  <div id="productos">
+  <div id="productosCesta">
 <?php if (isset($cesta) && $cesta->estaVacia()==false): ?>
                 <!-- mostrar la cesta -->
                 <table>
@@ -99,5 +99,7 @@ if (isset($_POST['quitar'])) {
     </form>        
   </div>
 </div>
+    
+     <script src="cargarDatos.js"></script>
 </body>
 </html>

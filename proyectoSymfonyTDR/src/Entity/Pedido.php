@@ -2,16 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\ProductoRepository;
+use App\Repository\PedidoRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\Familia;
 
 /**
- * @ORM\Entity(repositoryClass=ProductoRepository::class)
+ * @ORM\Entity(repositoryClass=PedidoRepository::class)
  */
-class Producto
+class Pedido
 {
     /**
      * @ORM\Id
@@ -21,30 +20,25 @@ class Producto
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="datetime")
      */
-    private $nombre;
+    private $fecha;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="float")
      */
-    private $precio;
+    private $coste;
 
     /**
-     * @ORM\ManyToOne(targetEntity=familia::class, inversedBy="productos")
+     * @ORM\ManyToOne(targetEntity=Usuario::class, inversedBy="pedidos")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $familia;
+    private $usuario;
 
     /**
-     * @ORM\OneToMany(targetEntity=PedidoProductos::class, mappedBy="producto", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=PedidoProductos::class, mappedBy="pedido", orphanRemoval=true)
      */
     private $pedidoProductos;
-
-    /**
-     * @ORM\Column(type="string", unique=true, length=255)
-     */
-    private $cod;
 
     public function __construct()
     {
@@ -56,38 +50,38 @@ class Producto
         return $this->id;
     }
 
-    public function getNombre(): ?string
+    public function getFecha(): ?\DateTimeInterface
     {
-        return $this->nombre;
+        return $this->fecha;
     }
 
-    public function setNombre(string $nombre): self
+    public function setFecha(\DateTimeInterface $fecha): self
     {
-        $this->nombre = $nombre;
+        $this->fecha = $fecha;
 
         return $this;
     }
 
-    public function getPrecio(): ?int
+    public function getCoste(): ?float
     {
-        return $this->precio;
+        return $this->coste;
     }
 
-    public function setPrecio(int $precio): self
+    public function setCoste(float $coste): self
     {
-        $this->precio = $precio;
+        $this->coste = $coste;
 
         return $this;
     }
 
-    public function getFamilia(): ?familia
+    public function getUsuario(): ?Usuario
     {
-        return $this->familia;
+        return $this->usuario;
     }
 
-    public function setFamilia(?familia $familia): self
+    public function setUsuario(?Usuario $usuario): self
     {
-        $this->familia = $familia;
+        $this->usuario = $usuario;
 
         return $this;
     }
@@ -104,7 +98,7 @@ class Producto
     {
         if (!$this->pedidoProductos->contains($pedidoProducto)) {
             $this->pedidoProductos[] = $pedidoProducto;
-            $pedidoProducto->setProducto($this);
+            $pedidoProducto->setPedido($this);
         }
 
         return $this;
@@ -114,22 +108,10 @@ class Producto
     {
         if ($this->pedidoProductos->removeElement($pedidoProducto)) {
             // set the owning side to null (unless already changed)
-            if ($pedidoProducto->getProducto() === $this) {
-                $pedidoProducto->setProducto(null);
+            if ($pedidoProducto->getPedido() === $this) {
+                $pedidoProducto->setPedido(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getCod(): ?string
-    {
-        return $this->cod;
-    }
-
-    public function setCod(string $cod): self
-    {
-        $this->cod = $cod;
 
         return $this;
     }
