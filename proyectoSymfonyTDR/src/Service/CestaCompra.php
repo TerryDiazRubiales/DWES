@@ -9,6 +9,7 @@ namespace App\Service;
 use Symfony\Component\HttpFoundation\RequestStack;
 use App\Entity\Producto;
 
+
 class CestaCompra {
     
     protected $carrito=[];
@@ -81,8 +82,11 @@ class CestaCompra {
                 $this->carrito[$codprod]['unidades'] = intval($this->carrito[$codprod]['unidades']) -1;
             }
         }
-        
-        
+       
+    }
+    
+    public function borrarCesta () {
+         $this->carrito = [];
     }
 
 }

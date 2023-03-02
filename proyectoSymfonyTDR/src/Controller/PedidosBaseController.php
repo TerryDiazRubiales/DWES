@@ -6,12 +6,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use App\Entity\Producto;
+use App\Entity\Pedido;
+use App\Entity\PedidoProductos;
 use App\Entity\Familia;
 use App\Entity\Usuario;
 use App\Service\CestaCompra;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
-use App\Entity\Producto;
 
 
 /**
@@ -89,10 +91,67 @@ class PedidosBaseController extends AbstractController
      /**
      * @Route("/pedido", name="pedido")
      */
-     public function realizarPedido(CestaCompra $cesta): Response
+     public function realizarPedido(ManagerRegistry $doctrine, CestaCompra $cesta): Response
     {
+        $error = false;
+         
+        $productos = $cesta->obtenerProductos();
+        $precioTotal = $cesta->obtenerPrecioTotal();
         
+        $entityManager = $doctrine->getManager();
+        
+        $pedido = new Pedido ();
+        $pedido->setFecha(\DateTime::createFromFormat('Y-m-d',date("Y-m-d")));
+        $pedido->setUsuario($this->getUser());
+        $pedido->setCoste($precioTotal);
+        
+        $entityManager->persist($pedido);
+        
+        foreach ($productos as $producto) {
+            $pedProd = new PedidoProductos ();
+            
+            $produc = $doctrine->getRepository(Producto::class)->find($producto['producto']->getId());
+            $pedProd->setProducto($produc);
+            
+            $pedProd->setUnidades($producto['unidades']);
+            $pedProd->setPedido($pedido);
+            
+            $entityManager->persist($pedProd);
+           
+        }
+        
+         try {
+             $entityManager->flush();
+             
+         } catch (Exception $ex) {
+             $error = true;
+             
+         }
+        
+         if($error==true) {
+            
+            $mensaje = "Hubo un error";
+            return $this->render('pedidos_base/pedido.html.twig', array('error'=>$mensaje,'pedido_id'=>$pedido->getId(),'usuario'=>$this->getUser()->getUsername(),'cesta'=>$productos, 'precio'=>$precioTotal));
+        
+         } else {
+             
+             $cesta->borrarCesta();
+             $cesta->guardarCesta();
+             $mensaje = false;
+             return $this->render('pedidos_base/pedido.html.twig', array('error'=>$mensaje,'pedido_id'=>$pedido->getId(),'usuario'=>$this->getUser()->getUsername(),'cesta'=>$productos, 'precio'=>$precioTotal));
+             
+         }
+         
      }
      
+     /**
+     * @Route("/pedidos", name="pedidos")
+     */
+     public function historial(ManagerRegistry $doctrine): Response
+    {
+         $pedidos = $doctrine->getRepository(Pedido::class)->findBy(array('usuario'=>$this->getUser()));
+         return $this->render('pedidos_base/pedidos.html.twig', array('pedidos'=>$pedidos));
+             
+     }
      
 }
