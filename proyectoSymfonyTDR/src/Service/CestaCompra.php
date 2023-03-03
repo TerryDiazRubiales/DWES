@@ -74,13 +74,18 @@ class CestaCompra {
         $codprod = $producto->getCod();
         
         if (array_key_exists($codprod, $this->carrito)) {
-            $unidades =  intval($this->carrito[$codprod]['unidades']);
             
-            if ($unidades <= 1) {
-                unset($this->carrito[$codprod]);
-            } else {
-                $this->carrito[$codprod]['unidades'] = intval($this->carrito[$codprod]['unidades']) -1;
+            if (! $unidades < 1) {
+                $total_unidades = $this->carrito[$codprod]['unidades'] = intval($this->carrito[$codprod]['unidades']) - $unidades;
+            
+                if ($total_unidades < 1) {
+                    unset($this->carrito[$codprod]);
+                } else {
+                    $this->carrito[$codprod]['unidades'] = $total_unidades;
+                }
+                
             }
+            
         }
        
     }
