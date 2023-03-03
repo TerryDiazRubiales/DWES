@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block contenido %}
+   
+    <table>
+           {% for producto in cesta %}
+                <tr>
+                   
+                    <td>{{ producto.producto.getCod() }}</td>
+                    <td>{{ producto.producto.getNombre() }}</td>
+                    <td>{{ producto.producto.getPrecio() }} euros</td>
+                    <td>{{ producto.unidades }} unidades</td>
+                    
+                </tr>
+               
+            {%  endfor %}     
+                
+    </table>
+   
+    <p>Precio Total: {{ precio }} euros</p>
+    
+            
+    
+{% endblock %}

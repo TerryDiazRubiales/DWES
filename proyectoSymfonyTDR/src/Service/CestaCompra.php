@@ -41,16 +41,29 @@ class CestaCompra {
     }
     
     public function cargarProducto($unidades, Producto $producto) {
-        $codProd = $producto->getCod();
+        $codprod = $producto->getCod();
         
-        if (array_key_exists($codProd, $this->carrito)) {
-            $this->carrito[$codProd]['unidades'] += $unidades;
+        if (array_key_exists($codprod, $this->carrito)) {
+            
+            if (!(intval($unidades) < 1)) {
+                $total_unidades= $this->carrito[$codProd]['unidades'] += $unidades;
+            
+                if ($total_unidades < 1) {
+                    unset($this->carrito[$codprod]);
+                } else {
+                    $this->carrito[$codprod]['unidades'] = $total_unidades;
+                }
+                
+            }
             
         } else {
-            $this->carrito[$codProd]['unidades'] = $unidades;
-            $this->carrito[$codProd]['producto'] = $producto;
+            $this->carrito[$codprod]['unidades'] = $unidades;
+            $this->carrito[$codprod]['producto'] = $producto;
            
         }
+        
+          
+        
     }
     
     public function obtenerProductos() {
@@ -75,8 +88,8 @@ class CestaCompra {
         
         if (array_key_exists($codprod, $this->carrito)) {
             
-            if (! $unidades < 1) {
-                $total_unidades = $this->carrito[$codprod]['unidades'] = intval($this->carrito[$codprod]['unidades']) - $unidades;
+            if (!(intval($unidades) < 1)) {
+                $total_unidades = intval($this->carrito[$codprod]['unidades']) - intval($unidades);
             
                 if ($total_unidades < 1) {
                     unset($this->carrito[$codprod]);

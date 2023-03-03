@@ -14,7 +14,7 @@ use App\Entity\Usuario;
 use App\Service\CestaCompra;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
-
+use Swift_Mailer;
 
 /**
 * @IsGranted("ROLE_USER")
@@ -22,6 +22,12 @@ use Symfony\Component\HttpFoundation\Request;
 
 class PedidosBaseController extends AbstractController
 {
+    private $mailer;
+    
+    public function __construct(Swift_Mailer $mailer) {
+        $this->mailer = $mailer;
+    }
+    
     /**
      * @Route("/familias", name="familias")
      */
@@ -91,7 +97,7 @@ class PedidosBaseController extends AbstractController
      /**
      * @Route("/pedido", name="pedido")
      */
-     public function realizarPedido(ManagerRegistry $doctrine, CestaCompra $cesta): Response
+     public function realizarPedido(Request $request, ManagerRegistry $doctrine, CestaCompra $cesta): Response
     {
         $error = false;
          
@@ -141,6 +147,20 @@ class PedidosBaseController extends AbstractController
              return $this->render('pedidos_base/pedido.html.twig', array('error'=>$mensaje,'pedido_id'=>$pedido->getId(),'usuario'=>$this->getUser()->getUsername(),'cesta'=>$productos, 'precio'=>$precioTotal));
              
          }
+         
+         $message = (new \Swift_Message('Confirmación de pedido'))
+          ->setFrom('aidadeprueba@gmail.com')
+          ->setTo($usuario->getEmail())
+          ->setBody(
+            $this->renderView(
+                'pedidos_base/confirmacion_pedido.html.twig',
+                ['pedido' => $pedido, 'cesta' => $cesta->obtenerProductos()]
+            ),
+            'text/html'
+         );
+        $this->mailer->send($message);
+        
+        
          
      }
      
